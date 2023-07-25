@@ -24,7 +24,7 @@ To install the app, clone or download the repository and open the .xcodeproj fil
 
 # Released in the Apple App Store
 Donwload it here:
-https://apps.apple.com/de/app/simple-ble-scanner/id1663446245?l=en 
+
 
 # Credits
 
