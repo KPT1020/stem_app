@@ -13,8 +13,9 @@ struct StudentView: View {
     @State var newStudent = ""
     @State var showSheet = false
     @ObservedObject var scannerManager = BluetoothScannerManager()
-    //@State var currindex:Int=0
-
+    @State var currindex:Int = -1
+    
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -23,71 +24,70 @@ struct StudentView: View {
                         if !students[index].isEmpty {
                             HStack {
                                 
-                            
+                                
                                 
                                 Spacer()
                                 
                                 NavigationLink {
-                                    if !scannerManager.scanners.isEmpty{
-                                        ContentView(bluetoothScanner: scannerManager.scanners[index],studentname: students[index])
+                                    if !scannerManager.scanners.isEmpty && index <= self.currindex{
+                                        
+                                        ContentView(bluetoothScanner: scannerManager.scanners[index])
+                                        
+                                        
                                     }
-                                   
+                                    
                                 } label: {
                                     Text(students[index])
                                         .onAppear(){
-                                            self.scannerManager.addScanner()
+                                            self.currindex+=1
+                                            self.scannerManager.addScanner(studentname: students[index])
+                                            
                                         }
                                 }
-
+                                
                                 Spacer()
-//                                Button("Pair") {
-//                                    self.currindex=index
-//                                    self.showSheet = true
-//
-//                                }
-
-
-                           
+                                
+                                
+                                
+                                
                             }
                             .id(index)
-//                            .sheet(isPresented: $showSheet) {
-//                               // Text("the index is \(index) and \(scannerManager.scanners[index])")
-//                                ContentView(bluetoothScanner: scannerManager.scanners[index])
-                          
-//
-//                            }
-                       
                         }
+                        
                     }
-                }
-                .navigationTitle("Student")
-                
-                HStack {
-                    Spacer()
-                    TextField("ADD NEW STUDENT", text: $newStudent)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onAppear {
-                            UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
-                        }
-                    Button("Add") {
-                        students.append(newStudent)
-                        newStudent = ""
-                    }
-                    Spacer()
                 }
             }
-            .environmentObject(scannerManager)
+            .navigationTitle("Student")
+            
+            HStack {
+                Spacer()
+                TextField("ADD NEW STUDENT", text: $newStudent)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onAppear {
+                        UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
+                    }
+                Button("Add") {
+                    if !newStudent.isEmpty{
+                        students.append(newStudent)
+                    }
+                    
+                    newStudent = ""
+                }
+                Spacer()
+            }
         }
-   
-        
-    
-            
-
-        
-            
-        
+        .environmentObject(scannerManager)
     }
+    
+    
+    
+    
+    
+    
+    
+    
 }
+
 
 struct StudentView_Previews: PreviewProvider {
     static var previews: some View {
