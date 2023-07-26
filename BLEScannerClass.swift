@@ -14,15 +14,16 @@ struct DiscoveredPeripheral {
     // Struct to represent a discovered peripheral
     var peripheral: CBPeripheral
     var advertisedData: String //name,time...
-
+    
 }
 
 class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBPeripheralDelegate {
     @Published var discoveredPeripherals = [DiscoveredPeripheral]() //create a empty DiscoveredPeripheral type array
     @Published var isScanning = false
     @Published var isConnecting = false
+    var studentname:String?
     
-              
+    
     //manage the Bluetooth scanning process
     var centralManager: CBCentralManager!
     // Set to store unique peripherals that have been discovered
@@ -38,6 +39,13 @@ class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBP
     override init() {
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        self.stopScan()
+    }
+    
+    convenience init(name: String) {
+        self.init() // call the designated initializer of the subclass
+        self.studentname = name
+        self.stopScan()
     }
     
     func startScan() {
@@ -109,7 +117,7 @@ class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBP
         }
     }
     
-   
+    
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics! {
@@ -121,18 +129,18 @@ class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBP
     
     var i=0
     var dictionary=[String:String]()
-
+    
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         let name:String?=peripheral.name
         var set:String=""
         if let para = time[name ?? ""] {
-              set=para// Prints 17:11:57
+            set=para
         }
         
         
         if isConnecting {
-           
+            
             
             if let data = characteristic.value {
                 
@@ -148,16 +156,15 @@ class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBP
                 return
             }
             
-            // print(dictionary)
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: dictionary)
                 let jsonObject = try JSONSerialization.jsonObject(with: jsonData)
                 print(jsonObject)
-              
-               
-             
                 
-                let ref = Database.database().reference().child(set)
+                
+                
+                
+                let ref = Database.database().reference().child(studentname!).child(set)
                 ref.setValue(jsonObject) { (error, ref) in
                     if let error = error {
                         print("Error setting value: \(error.localizedDescription)")
@@ -172,7 +179,7 @@ class BluetoothScanner: NSObject, CBCentralManagerDelegate, ObservableObject,CBP
         }else if !dictionary.isEmpty{
             
             
-          
+            
             
             
             
