@@ -12,7 +12,7 @@ This app scans for nearby Bluetooth Low Energy (BLE) devices and displays them i
 - Sort advertised data alphabetically
 - Start and stop scan with a button
 - Connect to and read data from selected devices
-- Saving the data to Firebase
+- Upload the data to Firebase
 
 # Requirements
 
