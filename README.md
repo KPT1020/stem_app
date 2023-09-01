@@ -29,5 +29,8 @@ To install the app, clone or download the repository and open the .xcodeproj fil
 
 Scanning function developed by Christian Moeller, Jan 2023
 
+#Google sheet link
 
+[
+](https://docs.google.com/spreadsheets/d/1NsYcEcWBHVrgbmeBpH2ABQHHn8oH2JDi4MwSnfDou0E/edit?usp=sharing)https://docs.google.com/spreadsheets/d/1NsYcEcWBHVrgbmeBpH2ABQHHn8oH2JDi4MwSnfDou0E/edit?usp=sharing
 
